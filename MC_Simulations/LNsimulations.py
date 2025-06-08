@@ -44,7 +44,7 @@ def Lognormal_Volatility(n, m, T, brownB, sigma0, params):
         dW = brownB[:, i] * np.sqrt(dt)
         log_vols[:, i+1] = log_vols[:, i] + kappa * (np.log(theta) - log_vols[:, i]) * dt + vega * dW
     
-    vols = np.exp(log_vols)  # Convert back to volatility scale
+    vols = np.exp(log_vols) 
     
     return vols
 
@@ -60,11 +60,9 @@ def CondMC(S0, K, sigma0, n, m, T, volupdate=None, volupdateparams=None,rho=0):
 
     sigma1=volupdate(n, m, T, brownB, sigma0, volupdateparams)
 
-    #v0 = np.sum(((sigma1[:, :]))*np.sqrt(dt), axis=1)
     v0 = np.sum(((sigma1[:, :])**2) * dt, axis=1)/ T 
 
     for j in range(0,m):
-        #int_dw=int_dw+sigma1[:, j]*(brownB[:,j+1] - brownB[:, j])*np.sqrt(T/m)
         int_dw=int_dw+sigma1[:, j]*(brownB[:,j+1] - brownB[:, j])*np.sqrt(dt)  
 
     for i in range(n):
